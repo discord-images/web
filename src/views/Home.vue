@@ -1,15 +1,11 @@
 <template>
-  <hello-world />
+	<v-container>
+		<v-autocomplete chips multiple></v-autocomplete>
+	</v-container>
 </template>
 
 <script>
-  import HelloWorld from '../components/HelloWorld'
-
-  export default {
-    name: 'Home',
-
-    components: {
-      HelloWorld,
-    },
-  }
+export default {
+	name: "Home",
+};
 </script>
