@@ -1,9 +1,11 @@
 <template>
   <v-container>
+    <TinyBox v-model="lightbox" :images="imageUrls" :no-thumbs="true"></TinyBox>
+
     <v-row>
-      <v-col v-for="img of images" :key="img.id">
+      <v-col v-for="(img, idx) of images" :key="img.id">
         <v-card>
-          <v-img :src="img.url" height="500px"> </v-img>
+          <v-img :src="img.url" @click="lightbox = idx" height="500px"> </v-img>
 
           <v-card-title>
             {{ imageName(img.url) }}
@@ -23,13 +25,17 @@
 <script>
 import db from "../firebase";
 import "../auth"; // FIXME temporary
+import TinyBox from "vue-tinybox";
 
 export default {
   name: "Home",
+  components: {
+    TinyBox
+  },
   data() {
     return {
-      images: [],
-      labels: []
+      lightbox: null,
+      images: []
     };
   },
   mounted() {
@@ -43,6 +49,9 @@ export default {
       });
   },
   computed: {
+    imageUrls() {
+      return this.images.map(x => x.url);
+    },
     imageName() {
       return url => {
         const n = url.lastIndexOf("/");
