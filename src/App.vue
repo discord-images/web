@@ -8,7 +8,9 @@
 </template>
 
 <script>
+import "./auth"; // FIXME temporary
 import Header from "./components/Header.vue";
+
 export default {
   components: { Header },
   name: "App"

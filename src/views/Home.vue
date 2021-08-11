@@ -2,7 +2,9 @@
   <v-container>
     <TinyBox v-model="lightbox" :images="imageUrls" :no-thumbs="true"></TinyBox>
 
-    <v-row>
+    <Sorting />
+
+    <v-row class="mt-8">
       <v-col v-for="(img, idx) of images" :key="img.id">
         <v-card>
           <v-img :src="img.url" @click="lightbox = idx" height="500px"> </v-img>
@@ -24,13 +26,14 @@
 
 <script>
 import db from "../firebase";
-import "../auth"; // FIXME temporary
 import TinyBox from "vue-tinybox";
+import Sorting from "../components/Sorting.vue";
 
 export default {
   name: "Home",
   components: {
-    TinyBox
+    TinyBox,
+    Sorting
   },
   data() {
     return {
