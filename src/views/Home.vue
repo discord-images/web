@@ -2,21 +2,24 @@
   <v-container>
     <TinyBox v-model="lightbox" :images="imageUrls" :no-thumbs="true"></TinyBox>
 
-    <Sorting />
+    <Sorting @search="getImages(selected, sorting)" />
 
     <v-row class="mt-8">
-      <v-col v-for="(img, idx) of images" :key="img.id">
+      <v-col v-for="(img, idx) of images" :key="img._id">
         <v-card>
-          <v-img :src="img.url" @click="lightbox = idx" height="500px"> </v-img>
+          <v-img :src="img._url" @click="lightbox = idx" height="500px">
+          </v-img>
 
           <v-card-title>
-            {{ imageName(img.url) }}
+            {{ imageName(img._url) }}
           </v-card-title>
 
           <v-card-text>
-            <v-chip v-for="l in confidentTags(img.labels)" :key="l.value">
-              {{ l.label }}
-            </v-chip>
+            <v-chip-group>
+              <v-chip v-for="l of confidentTags(img)" :key="l.value">
+                {{ l.label }}
+              </v-chip>
+            </v-chip-group>
           </v-card-text>
         </v-card>
       </v-col>
@@ -44,31 +47,52 @@ export default {
   mounted() {
     // get some data initially
     db.collection("images")
+      .limit(10)
       .get()
       .then(querySnapshot => {
         querySnapshot.forEach(doc => {
-          this.images.push({ id: doc.id, ...doc.data() });
+          this.images.push({ _id: doc.id, ...doc.data() });
         });
       });
   },
+  methods: {
+    getImages(selected, sorting) {
+      let query = db.collection("images");
+      for (const sel of selected) {
+        query = query.where(sel, ">", 0);
+      }
+      console.log("TODO sorting  " + sorting);
+
+      query
+        .get()
+        .then(res => console.log(res.data()))
+        .catch(error => console.log(error));
+    }
+  },
   computed: {
+    // all avilable image urls (for tinybox)
     imageUrls() {
-      return this.images.map(x => x.url);
+      return this.images.map(img => img._url);
     },
+    // the image filename taken from the url
     imageName() {
       return url => {
         const n = url.lastIndexOf("/");
         return url.substring(n + 1);
       };
     },
+    // all tags of an image with a confidence higher than .9
     confidentTags() {
-      return labels => {
+      return img => {
         let r = [];
-        for (const lab in labels) {
-          r.push({
-            label: lab,
-            value: labels[lab]
-          });
+        const keys = Object.keys(img).filter(x => !x.startsWith("_"));
+        for (const label of keys) {
+          if (img[label] > 0.9) {
+            r.push({
+              label: label,
+              value: img[label]
+            });
+          }
         }
         return r;
       };
