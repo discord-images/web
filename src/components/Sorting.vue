@@ -5,16 +5,18 @@
       <v-row>
         <v-col md="8">
           <v-autocomplete
-            :items="labels"
+            :items="allLabels"
             v-model="selected"
             chips
             deletable-chips
             multiple
           ></v-autocomplete>
-          <!-- Suggested:
+          Suggested:
           <v-chip-group>
-            <v-chip>funny</v-chip>
-          </v-chip-group> -->
+            <v-chip v-for="label in popularLabels" :key="label">
+              {{ label }}
+            </v-chip>
+          </v-chip-group>
         </v-col>
         <v-col md="4">
           <v-radio-group v-model="sorting">
@@ -31,18 +33,45 @@
 </template>
 
 <script>
+import db from "../firebase";
+
 export default {
   name: "Sorting",
   data() {
     return {
-      labels: ["nature", "funny", "blank", "text", "hello"],
+      labels: {},
       selected: ["nature", "funny"],
       sorting: "confidence"
     };
   },
+  mounted() {
+    db.collection("stats")
+      .doc("labels")
+      .get()
+      .then(res => {
+        this.labels = res.data();
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  },
   methods: {
     search() {
       this.$emit("search", this.selected, this.sorting);
+    }
+  },
+  computed: {
+    popularLabels() {
+      return Object.keys(
+        Object.fromEntries(
+          Object.entries(this.labels)
+            .sort(([, a], [, b]) => b - a)
+            .slice(0, 5)
+        )
+      );
+    },
+    allLabels() {
+      return Object.keys(this.labels);
     }
   }
 };
