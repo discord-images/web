@@ -12,11 +12,13 @@
             multiple
           ></v-autocomplete>
           Suggested:
-          <v-chip-group>
-            <v-chip v-for="label in popularLabels" :key="label">
-              {{ label }}
-            </v-chip>
-          </v-chip-group>
+          <v-chip
+            v-for="label in popularLabels"
+            :key="label"
+            @click="selected.push(label)"
+          >
+            {{ label }}
+          </v-chip>
         </v-col>
         <v-col md="4">
           <v-radio-group v-model="sorting">
@@ -40,7 +42,7 @@ export default {
   data() {
     return {
       labels: {},
-      selected: ["nature", "funny"],
+      selected: [],
       sorting: "confidence"
     };
   },
