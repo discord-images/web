@@ -35,10 +35,11 @@
 </template>
 
 <script>
-import db from "../firebase";
+import db from "../plugins/firebase";
 
 export default {
   name: "Sorting",
+
   data() {
     return {
       labels: {},
@@ -46,6 +47,7 @@ export default {
       sorting: "confidence"
     };
   },
+
   mounted() {
     db.collection("stats")
       .doc("labels")
@@ -57,11 +59,13 @@ export default {
         console.log(error);
       });
   },
+
   methods: {
     search() {
       this.$emit("search", this.selected, this.sorting);
     }
   },
+
   computed: {
     popularLabels() {
       return Object.keys(

@@ -28,22 +28,25 @@
 </template>
 
 <script>
-import db from "../firebase";
+import db from "../plugins/firebase";
 import TinyBox from "vue-tinybox";
 import Sorting from "./Sorting.vue";
 
 export default {
   name: "Home",
+
   components: {
     TinyBox,
     Sorting
   },
+
   data() {
     return {
       lightbox: null,
       images: []
     };
   },
+
   mounted() {
     // get some data initially
     db.collection("images")
@@ -55,6 +58,7 @@ export default {
         });
       });
   },
+
   methods: {
     getImages(selected, sorting) {
       let query = db.collection("images");
@@ -69,6 +73,7 @@ export default {
         .catch(error => console.log(error));
     }
   },
+
   computed: {
     // all avilable image urls (for tinybox)
     imageUrls() {
