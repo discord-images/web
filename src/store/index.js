@@ -8,9 +8,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     images: [],
-    labels: [],
-    selected: [],
-    sorting: []
+    labels: []
   },
   getters: {
     // all avilable image urls
@@ -21,15 +19,20 @@ export default new Vuex.Store({
   mutations: {
     changeImages(state, updated) {
       state.images = updated;
+    },
+    changeLabels(state, updated) {
+      state.labels = updated;
     }
   },
   actions: {
-    getImages(context) {
+    getImages(context, { selected, sorting }) {
       let query = db.collection("images");
       // for (const sel of context.selected) {
       //   query = query.where(sel, ">", 0);
       // }
       // TODO sorting
+      console.log(selected);
+      console.log(sorting);
 
       query
         .get()
@@ -42,12 +45,12 @@ export default new Vuex.Store({
         })
         .catch(error => console.log(error));
     },
-    getLabels() {
+    getLabels(context) {
       db.collection("stats")
         .doc("labels")
         .get()
         .then(res => {
-          this.labels = res.data();
+          context.commit("changeLabels", res.data());
         })
         .catch(error => {
           console.log(error);

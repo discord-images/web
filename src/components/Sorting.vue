@@ -15,7 +15,7 @@
           <v-chip
             v-for="label in popularLabels"
             :key="label"
-            @click="selected.push(label)"
+            @click="addToSelected(label)"
           >
             {{ label }}
           </v-chip>
@@ -38,13 +38,32 @@
 export default {
   name: "Sorting",
 
+  data() {
+    return {
+      selected: [],
+      sorting: "recently"
+    };
+  },
+
   methods: {
     search() {
-      this.$store.dispatch("getImages")
+      this.$store.dispatch("getImages", {
+        selected: this.selected,
+        sorting: this.sorting
+      });
+    },
+    addToSelected(item) {
+      if (!this.selected.includes(item)) {
+        this.selected.push(item);
+      }
     }
   },
 
   computed: {
+    labels() {
+      return this.$store.state.labels;
+    },
+
     popularLabels() {
       return Object.keys(
         Object.fromEntries(

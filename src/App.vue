@@ -3,7 +3,7 @@
     <Header />
     <v-main>
       <v-container>
-        <!-- <Sorting /> -->
+        <Sorting />
         <Home />
       </v-container>
     </v-main>
@@ -14,16 +14,16 @@
 import "./plugins/auth"; // FIXME temporary
 import Header from "./components/Header.vue";
 import Home from "./components/Home.vue";
-// import Sorting from "./components/Sorting.vue";
+import Sorting from "./components/Sorting.vue";
 
 export default {
   name: "App",
 
   mounted() {
-    this.$store.dispatch("getImages");
+    this.$store.dispatch("getImages", {});
     this.$store.dispatch("getLabels");
   },
 
-  components: { Header, Home }
+  components: { Header, Home, Sorting }
 };
 </script>
