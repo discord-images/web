@@ -1,14 +1,11 @@
 <template>
-  <v-container>
-    <TinyBox v-model="lightbox" :images="imageUrls" :no-thumbs="true"></TinyBox>
-
-    <Sorting @search="getImages(selected, sorting)" />
+  <div>
+    <TinyBox v-model="lightbox" :images="$store.getters.imageUrls" :no-thumbs="true"></TinyBox>
 
     <v-row class="mt-8">
       <v-col v-for="(img, idx) of images" :key="img._id">
         <v-card>
-          <v-img :src="img._url" @click="lightbox = idx" height="500px">
-          </v-img>
+          <v-img :src="img._url" @click="lightbox = idx" height="500px"></v-img>
 
           <v-card-title>
             {{ imageName(img._url) }}
@@ -24,60 +21,28 @@
         </v-card>
       </v-col>
     </v-row>
-  </v-container>
+  </div>
 </template>
 
 <script>
-import db from "../plugins/firebase";
 import TinyBox from "vue-tinybox";
-import Sorting from "./Sorting.vue";
 
 export default {
   name: "Home",
 
   components: {
-    TinyBox,
-    Sorting
+    TinyBox
   },
 
   data() {
     return {
-      lightbox: null,
-      images: []
+      lightbox: null
     };
   },
 
-  mounted() {
-    // get some data initially
-    db.collection("images")
-      .limit(10)
-      .get()
-      .then(querySnapshot => {
-        querySnapshot.forEach(doc => {
-          this.images.push({ _id: doc.id, ...doc.data() });
-        });
-      });
-  },
-
-  methods: {
-    getImages(selected, sorting) {
-      let query = db.collection("images");
-      for (const sel of selected) {
-        query = query.where(sel, ">", 0);
-      }
-      console.log("TODO sorting  " + sorting);
-
-      query
-        .get()
-        .then(res => console.log(res.data()))
-        .catch(error => console.log(error));
-    }
-  },
-
   computed: {
-    // all avilable image urls (for tinybox)
-    imageUrls() {
-      return this.images.map(img => img._url);
+    images() {
+      return this.$store.state.images;
     },
     // the image filename taken from the url
     imageName() {

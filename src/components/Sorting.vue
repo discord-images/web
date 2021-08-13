@@ -35,34 +35,12 @@
 </template>
 
 <script>
-import db from "../plugins/firebase";
-
 export default {
   name: "Sorting",
 
-  data() {
-    return {
-      labels: {},
-      selected: [],
-      sorting: "confidence"
-    };
-  },
-
-  mounted() {
-    db.collection("stats")
-      .doc("labels")
-      .get()
-      .then(res => {
-        this.labels = res.data();
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  },
-
   methods: {
     search() {
-      this.$emit("search", this.selected, this.sorting);
+      this.$store.dispatch("getImages")
     }
   },
 
