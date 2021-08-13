@@ -30,7 +30,7 @@
 <script>
 import db from "../firebase";
 import TinyBox from "vue-tinybox";
-import Sorting from "../components/Sorting.vue";
+import Sorting from "./Sorting.vue";
 
 export default {
   name: "Home",

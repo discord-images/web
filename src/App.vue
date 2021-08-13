@@ -2,7 +2,7 @@
   <v-app>
     <Header />
     <v-main>
-      <router-view />
+      <Home />
     </v-main>
   </v-app>
 </template>
@@ -10,9 +10,10 @@
 <script>
 import "./auth"; // FIXME temporary
 import Header from "./components/Header.vue";
+import Home from "./components/Home.vue";
 
 export default {
-  components: { Header },
+  components: { Header, Home },
   name: "App"
 };
 </script>
