@@ -13,7 +13,7 @@ export default new Vuex.Store({
   getters: {
     // all avilable image urls
     imageUrls(state) {
-      return state.images.map(img => img._url);
+      return state.images.map(img => img.url);
     }
   },
   mutations: {
@@ -25,21 +25,23 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    getImages(context, { selected, sorting }) {
-      let query = db.collection("images");
-      // for (const sel of context.selected) {
-      //   query = query.where(sel, ">", 0);
-      // }
-      // TODO sorting
-      console.log(selected);
-      console.log(sorting);
+    getImages(context, selected = []) {
+      let query = db.collection("images").orderBy("time", "desc");
+
+      if (selected.length > 0) {
+        query = query.where(
+          "labels",
+          "array-contains-any",
+          selected.slice(0, 10)
+        );
+      }
 
       query
         .get()
         .then(querySnapshot => {
           let data = [];
           querySnapshot.forEach(doc => {
-            data.push({ _id: doc.id, ...doc.data() });
+            data.push({ id: doc.id, ...doc.data() });
           });
           context.commit("changeImages", data);
         })

@@ -2,31 +2,22 @@
   <v-card class="my-4">
     <v-card-title>Search</v-card-title>
     <v-card-text>
-      <v-row>
-        <v-col md="8">
-          <v-autocomplete
-            :items="allLabels"
-            v-model="selected"
-            chips
-            deletable-chips
-            multiple
-          ></v-autocomplete>
-          Suggested:
-          <v-chip
-            v-for="label in popularLabels"
-            :key="label"
-            @click="addToSelected(label)"
-          >
-            {{ label }}
-          </v-chip>
-        </v-col>
-        <v-col md="4">
-          <v-radio-group v-model="sorting">
-            <v-radio label="sort by confidence" value="confidence"></v-radio>
-            <v-radio label="sort by recently" value="recently"></v-radio>
-          </v-radio-group>
-        </v-col>
-      </v-row>
+      <v-autocomplete
+        :items="allLabels"
+        v-model="selected"
+        chips
+        deletable-chips
+        multiple
+      ></v-autocomplete>
+      Suggested:
+      <v-chip
+        v-for="label in popularLabels"
+        :key="label"
+        class="mx-1"
+        @click="addToSelected(label)"
+      >
+        {{ label }}
+      </v-chip>
     </v-card-text>
     <v-card-actions>
       <v-btn color="primary" @click="search()">go</v-btn>
@@ -40,17 +31,13 @@ export default {
 
   data() {
     return {
-      selected: [],
-      sorting: "recently"
+      selected: []
     };
   },
 
   methods: {
     search() {
-      this.$store.dispatch("getImages", {
-        selected: this.selected,
-        sorting: this.sorting
-      });
+      this.$store.dispatch("getImages", this.selected);
     },
     addToSelected(item) {
       if (!this.selected.includes(item)) {
@@ -63,7 +50,6 @@ export default {
     labels() {
       return this.$store.state.labels;
     },
-
     popularLabels() {
       return Object.keys(
         Object.fromEntries(

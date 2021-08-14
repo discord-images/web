@@ -20,7 +20,7 @@ export default {
   name: "App",
 
   mounted() {
-    this.$store.dispatch("getImages", {});
+    this.$store.dispatch("getImages");
     this.$store.dispatch("getLabels");
   },
 
