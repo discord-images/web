@@ -8,8 +8,15 @@
         <v-icon>mdi-logout</v-icon>
       </v-btn>
     </div>
-    <div v-else>
-      <v-btn text @click="signIn()">
+    <div v-else class="d-flex">
+      <v-text-field
+        filled
+        dense
+        placeholder="password"
+        v-model="password"
+        type="password"
+      ></v-text-field>
+      <v-btn text depressed @click="signIn()">
         <span class="mr-2">Sign In</span>
         <v-icon>mdi-account</v-icon>
       </v-btn>
@@ -23,12 +30,19 @@ import { logout, login } from "../plugins/auth";
 export default {
   name: "Header",
 
+  data() {
+    return {
+      password: ""
+    };
+  },
+
   methods: {
     signOut() {
       logout();
     },
     signIn() {
       login("test@example.com", "test123qwe");
+      // login("test@example.com", this.password);
     }
   },
 

@@ -35,6 +35,10 @@ export default {
     };
   },
 
+  mounted() {
+    this.$store.dispatch("getLabels");
+  },
+
   methods: {
     search() {
       this.$store.dispatch("getImages", this.selected);

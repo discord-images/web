@@ -44,6 +44,10 @@ export default {
     };
   },
 
+  mounted() {
+    this.$store.dispatch("getImages");
+  },
+
   computed: {
     images() {
       return this.$store.state.images;
