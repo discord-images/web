@@ -8,7 +8,8 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     images: [],
-    labels: []
+    labels: [],
+    signedIn: false
   },
   getters: {
     // all avilable image urls
@@ -22,6 +23,10 @@ export default new Vuex.Store({
     },
     changeLabels(state, updated) {
       state.labels = updated;
+    },
+    changeAuthStatus(state, updated) {
+      console.log("auth status", updated);
+      state.signedIn = updated;
     }
   },
   actions: {
@@ -57,6 +62,9 @@ export default new Vuex.Store({
         .catch(error => {
           console.log(error);
         });
+    },
+    setAuthStatus(context, authStatus) {
+      context.commit("changeAuthStatus", authStatus);
     }
   }
 });

@@ -3,15 +3,17 @@
     <Header />
     <v-main>
       <v-container>
-        <Sorting />
-        <Home />
+        <Sorting v-if="signedIn" />
+        <Home v-if="signedIn" />
+        <v-alert v-if="!signedIn" type="error">
+          Please sign In on the top right to view the page.
+        </v-alert>
       </v-container>
     </v-main>
   </v-app>
 </template>
 
 <script>
-import "./plugins/auth"; // FIXME temporary
 import Header from "./components/Header.vue";
 import Home from "./components/Home.vue";
 import Sorting from "./components/Sorting.vue";
@@ -24,6 +26,12 @@ export default {
     this.$store.dispatch("getLabels");
   },
 
-  components: { Header, Home, Sorting }
+  components: { Header, Home, Sorting },
+
+  computed: {
+    signedIn() {
+      return this.$store.state.signedIn;
+    }
+  }
 };
 </script>
