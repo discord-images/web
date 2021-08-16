@@ -15,6 +15,10 @@
             {{ imageName(img.url) }}
           </v-card-title>
 
+          <v-card-subtitle>
+            {{ img.caption }}
+          </v-card-subtitle>
+
           <v-card-text>
             <v-chip-group>
               <v-chip v-for="l of img.labels" :key="l">

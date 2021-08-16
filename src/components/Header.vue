@@ -8,15 +8,16 @@
         <v-icon>mdi-logout</v-icon>
       </v-btn>
     </div>
-    <div v-else class="d-flex">
+    <div v-else class="d-inline-flex mt-6">
       <v-text-field
-        filled
         dense
-        placeholder="password"
+        solo
+        light
+        label="Password"
         v-model="password"
         type="password"
       ></v-text-field>
-      <v-btn text depressed @click="signIn()">
+      <v-btn text @click="signIn()">
         <span class="mr-2">Sign In</span>
         <v-icon>mdi-account</v-icon>
       </v-btn>
@@ -41,8 +42,7 @@ export default {
       logout();
     },
     signIn() {
-      login("test@example.com", "test123qwe");
-      // login("test@example.com", this.password);
+      login("user@example.com", this.password);
     }
   },
 
