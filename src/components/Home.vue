@@ -25,6 +25,25 @@
                 {{ l }}
               </v-chip>
             </v-chip-group>
+
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  v-bind="attrs"
+                  v-on="on"
+                  v-if="img.text"
+                  @click="copyToClipboard(img.text)"
+                  color="secondary"
+                  outlined
+                >
+                  <v-icon>mdi-clipboard-outline</v-icon>
+                </v-btn>
+                <!-- <v-btn color="primary" dark v-bind="attrs" v-on="on">
+                  Bottom
+                </v-btn> -->
+              </template>
+              <span>Copy text from Image</span>
+            </v-tooltip>
           </v-card-text>
         </v-card>
       </v-col>
@@ -62,6 +81,18 @@ export default {
         const n = url.lastIndexOf("/");
         return url.substring(n + 1);
       };
+    }
+  },
+
+  methods: {
+    copyToClipboard(val) {
+      const el = document.createElement("textarea");
+      el.value = val;
+      document.body.appendChild(el);
+      el.select();
+      el.setSelectionRange(0, 999999);
+      document.execCommand("copy");
+      document.body.removeChild(el);
     }
   }
 };
