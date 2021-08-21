@@ -6,7 +6,16 @@
       :no-thumbs="true"
     ></TinyBox>
 
-    <v-row class="mt-8">
+    <v-progress-circular
+      :size="100"
+      :width="10"
+      color="primary"
+      indeterminate
+      v-if="images.length <= 0"
+      class="center mt-16"
+    ></v-progress-circular>
+
+    <v-row class="mt-8" v-if="images.length > 0">
       <v-col v-for="(img, idx) of images" :key="img.id">
         <v-card>
           <v-img :src="img.url" @click="lightbox = idx" height="500px"></v-img>
@@ -72,8 +81,9 @@ export default {
     images() {
       return this.$store.state.images;
     },
-    // the image filename taken from the url
+
     imageName() {
+      // the image filename taken from the url
       return url => {
         const n = url.lastIndexOf("/");
         return url.substring(n + 1);
@@ -94,3 +104,11 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>
