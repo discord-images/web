@@ -38,9 +38,6 @@
                 >
                   <v-icon>mdi-clipboard-outline</v-icon>
                 </v-btn>
-                <!-- <v-btn color="primary" dark v-bind="attrs" v-on="on">
-                  Bottom
-                </v-btn> -->
               </template>
               <span>Copy text from Image</span>
             </v-tooltip>
