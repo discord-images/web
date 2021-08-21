@@ -11,24 +11,29 @@ export default new Vuex.Store({
     labels: [],
     signedIn: false
   },
+
   getters: {
-    // all avilable image urls
     imageUrls(state) {
+      // all avilable image urls
       return state.images.map(img => img.url);
     }
   },
+
   mutations: {
     changeImages(state, updated) {
       state.images = updated;
     },
+
     changeLabels(state, updated) {
       state.labels = updated;
     },
+
     changeAuthStatus(state, updated) {
       console.log("auth status", updated);
       state.signedIn = updated;
     }
   },
+
   actions: {
     getImages(context, selected = []) {
       let query = db.collection("images").orderBy("time", "desc");
@@ -52,6 +57,7 @@ export default new Vuex.Store({
         })
         .catch(error => console.log(error));
     },
+
     getLabels(context) {
       db.collection("stats")
         .doc("labels")
@@ -63,6 +69,7 @@ export default new Vuex.Store({
           console.log(error);
         });
     },
+
     setAuthStatus(context, authStatus) {
       context.commit("changeAuthStatus", authStatus);
     }
