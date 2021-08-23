@@ -7,7 +7,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    images: [],
+    images: null,
     labels: [],
     signedIn: false
   },
@@ -15,6 +15,7 @@ export default new Vuex.Store({
   getters: {
     imageUrls(state) {
       // all avilable image urls
+      if (!state.images) return [];
       return state.images.map(img => img.url);
     }
   },
@@ -36,6 +37,8 @@ export default new Vuex.Store({
 
   actions: {
     getImages(context, selected = []) {
+      context.commit("changeImages", null)
+
       let query = db.collection("images").orderBy("time", "desc");
 
       if (selected.length > 0) {

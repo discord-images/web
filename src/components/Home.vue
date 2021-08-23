@@ -11,48 +11,55 @@
       :width="10"
       color="primary"
       indeterminate
-      v-if="images.length <= 0"
+      v-if="!images"
       class="center mt-16"
     ></v-progress-circular>
 
-    <v-row class="mt-8" v-if="images.length > 0">
-      <v-col v-for="(img, idx) of images" :key="img.id">
-        <v-card>
-          <v-img :src="img.url" @click="lightbox = idx" height="500px"></v-img>
+    <v-row class="mt-8" v-if="images">
+      <div v-if="images.length > 0">
+        <v-col v-for="(img, idx) of images" :key="img.id">
+          <v-card>
+            <v-img
+              :src="img.url"
+              @click="lightbox = idx"
+              height="500px"
+            ></v-img>
 
-          <v-card-title>
-            {{ imageName(img.url) }}
-          </v-card-title>
+            <v-card-title>
+              {{ imageName(img.url) }}
+            </v-card-title>
 
-          <v-card-subtitle>
-            {{ img.caption }}
-          </v-card-subtitle>
+            <v-card-subtitle>
+              {{ img.caption }}
+            </v-card-subtitle>
 
-          <v-card-text>
-            <v-chip-group>
-              <v-chip v-for="l of img.labels" :key="l">
-                {{ l }}
-              </v-chip>
-            </v-chip-group>
+            <v-card-text>
+              <v-chip-group>
+                <v-chip v-for="l of img.labels" :key="l">
+                  {{ l }}
+                </v-chip>
+              </v-chip-group>
 
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn
-                  v-bind="attrs"
-                  v-on="on"
-                  v-if="img.text"
-                  @click="copyToClipboard(img.text)"
-                  color="secondary"
-                  outlined
-                >
-                  <v-icon>mdi-clipboard-outline</v-icon>
-                </v-btn>
-              </template>
-              <span>Copy text from Image</span>
-            </v-tooltip>
-          </v-card-text>
-        </v-card>
-      </v-col>
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    v-bind="attrs"
+                    v-on="on"
+                    v-if="img.text"
+                    @click="copyToClipboard(img.text)"
+                    color="secondary"
+                    outlined
+                  >
+                    <v-icon>mdi-clipboard-outline</v-icon>
+                  </v-btn>
+                </template>
+                <span>Copy text from Image</span>
+              </v-tooltip>
+            </v-card-text>
+          </v-card>
+        </v-col>
+      </div>
+      <div v-else>no images found</div>
     </v-row>
   </div>
 </template>
@@ -64,12 +71,12 @@ export default {
   name: "Home",
 
   components: {
-    TinyBox
+    TinyBox,
   },
 
   data() {
     return {
-      lightbox: null
+      lightbox: null,
     };
   },
 
@@ -84,11 +91,11 @@ export default {
 
     imageName() {
       // the image filename taken from the url
-      return url => {
+      return (url) => {
         const n = url.lastIndexOf("/");
         return url.substring(n + 1);
       };
-    }
+    },
   },
 
   methods: {
@@ -100,8 +107,8 @@ export default {
       el.setSelectionRange(0, 999999);
       document.execCommand("copy");
       document.body.removeChild(el);
-    }
-  }
+    },
+  },
 };
 </script>
 
